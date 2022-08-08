@@ -23,15 +23,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 		http.authorizeRequests()
 			.antMatchers("/", "/index", "/mypage/**")			// 우리가 지정한 요청
-			.authenticated()					// 인증을 거쳐라
-			.anyRequest()						// 다른 모든요청은
-			.permitAll()						// 모두 접근 권한을 부여하겠다.
+			.authenticated()									// 인증을 거쳐라
+			.anyRequest()										// 다른 모든요청은
+			.permitAll()										// 모두 접근 권한을 부여하겠다.
 			.and()
-			.formLogin()						// 로그인 방식은 form로그인을 사용하겠다.
-			.loginPage("/auth/signin") 			// 로그인 페이지는 해당 get요청을 통해 접근한다.
-			.loginProcessingUrl("/auth/signin")	// 로그인 요청(post요청)
+			.formLogin()										// 로그인 방식은 form로그인을 사용하겠다.
+			//.loginPage("/auth/signin") 						// 로그인 페이지는 해당 get요청을 통해 접근한다.
+			.loginProcessingUrl("/auth/signin")					// 로그인 요청(post요청)
 			.failureHandler(new AuthFailureHandler())
-			.defaultSuccessUrl("/");
+			.defaultSuccessUrl("/index");
 	}
 	
 }
