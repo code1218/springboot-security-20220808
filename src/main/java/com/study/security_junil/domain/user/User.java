@@ -3,6 +3,7 @@ package com.study.security_junil.domain.user;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public class User {
 	private String user_name;
 	private String user_email;
 	private String user_id;
+	private String oauth2_id;
 	private String user_password;
 	private String user_roles;				// ROLE_USER,ROLE_ADMIN,ROLE_MANAGER
 	private String user_provider;

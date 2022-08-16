@@ -3,11 +3,11 @@ package com.study.security_junil.service.auth;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.study.security_junil.domain.user.User;
 import com.study.security_junil.domain.user.UserRepository;
+import com.study.security_junil.handler.aop.annotation.Log;
 import com.study.security_junil.web.dto.auth.SignupReqDto;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 	
 	private final UserRepository userRepository;
 
+	@Log
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User userEntity = null;
@@ -36,6 +37,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 		return new PrincipalDetails(userEntity);
 	}
 	
+	@Log
 	public boolean addUser(SignupReqDto signupReqDto) throws Exception {
 		
 		return userRepository.save(signupReqDto.toEntity()) > 0;

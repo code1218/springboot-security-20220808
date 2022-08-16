@@ -1,7 +1,5 @@
 package com.study.security_junil.handler.aop;
 
-import java.lang.reflect.Parameter;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -39,7 +37,6 @@ public class TimerAop {
 		
 		return result;
 	}
-	
 	
 }
 
