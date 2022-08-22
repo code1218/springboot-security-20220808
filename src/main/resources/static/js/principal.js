@@ -1,3 +1,4 @@
+
 function getPrincipal() {
 	let user = null;
 	
@@ -17,10 +18,8 @@ function getPrincipal() {
 	return user;	
 }
 
-function loadHeader() {
+function loadHeader(user) {
 	const authItems = document.querySelector(".auth-items");
-	
-	let user = getPrincipal();
 	
 	if(user == null) {
 		authItems.innerHTML = `
@@ -62,7 +61,11 @@ function loadHeader() {
 	}
 }
 
-loadHeader();
+let user = getPrincipal();
 
+loadHeader(user);
 
+function getUser() {
+	return user;
+}
 

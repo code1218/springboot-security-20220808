@@ -43,13 +43,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/v1/grant/test/manager/**")
 			.access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
 			
+			.antMatchers("/notice/addition", "/notice/modification/**")
+			//.access("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")
+			.hasRole("ADMIN")
+			
 			.antMatchers("/api/v1/grant/test/admin/**")
 			.access("hasRole('ROLE_ADMIN')")
 			
 			.antMatchers("/", "/index", "/mypage/**")	// 우리가 지정한 요청
 			.authenticated()	// 인증을 거쳐라
-			.antMatchers("/notice/addition", "/notice/modification/**")
-			.authenticated()
+			
 			.anyRequest()										// 다른 모든요청은
 			.permitAll()										// 모두 접근 권한을 부여하겠다.
 			
