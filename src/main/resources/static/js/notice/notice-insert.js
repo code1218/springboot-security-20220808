@@ -17,6 +17,8 @@ submitButton.onclick = () => {
     
     let formData = new FormData(document.querySelector("form"));
     
+    formData.append("userCode", getUser().user_code);
+    
     formData.forEach((v, k) => {
 		console.log("key: " + k);
 		console.log("value: " + v);
