@@ -17,7 +17,7 @@ public class NoticePageController {
 	public String loadNoticeInsert() {
 		return "notice/notice_insert";
 	}
-	@GetMapping("/{noticeCode}")
+	@GetMapping("/detail/{noticeCode}")
 	public String loadNoticeDetail() {
 		return "notice/notice_detail";
 	}
