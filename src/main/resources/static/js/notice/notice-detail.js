@@ -1,13 +1,15 @@
+const preButton = document.querySelector(".pre");
+const nextButton = document.querySelector(".next");
 
-load();
+let noticeCode = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
 
-function load() {
-	const noticeCode = location.pathname.substring(location.pathname.lastIndexOf("/") + 1);
-	
+load("/api/v1/notice/");
+
+function load(uri) {
 	$.ajax({
 		async: false,
 		type: "get",
-		url: "/api/v1/notice/" + noticeCode,
+		url: uri + noticeCode,
 		dataType: "json",
 		success: (response) => {
 			console.log(JSON.stringify(response.data));
@@ -25,6 +27,8 @@ function getNotice(notice) {
 	const noticeContent = document.querySelector(".notice-content");
 	const noticeFile = document.querySelector(".notice-file");
 	
+	noticeCode = notice.noticeCode;
+	
 	noticeDetailTitle.innerHTML = notice.noticeTitle;
 	noticeDetailDescriptions[0].innerHTML = "작성자: " + notice.userId;
 	noticeDetailDescriptions[1].innerHTML = "작성일: " + notice.createDate;
@@ -39,6 +43,32 @@ function getNotice(notice) {
 	});
 	noticeFile.innerHTML += noticeFileArray.join(" / ");
 }
+
+preButton.onclick = () => {
+	load("/api/v1/notice/pre/");
+}
+
+nextButton.onclick = () => {
+	load("/api/v1/notice/next/");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
