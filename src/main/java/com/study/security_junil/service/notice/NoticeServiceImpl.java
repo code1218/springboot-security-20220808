@@ -38,12 +38,17 @@ public class NoticeServiceImpl implements NoticeService {
 	private final NoticeRepository noticeRepository;
 	
 	@Override
-	public List<GetNoticeListResponseDto> getNoticeList(int page) throws Exception {
+	public List<GetNoticeListResponseDto> getNoticeList(int page, String searchFlag, String searchValue) throws Exception {
 		int index = (page - 1) * 10;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("index", index);
+		map.put("search_flag", searchFlag);
+		map.put("search_value", searchValue == null ? "" : searchValue);
 		
 		List<GetNoticeListResponseDto> list = new ArrayList<GetNoticeListResponseDto>();
 		
-		noticeRepository.getNoticeList(index).forEach(notice -> {
+		noticeRepository.getNoticeList(map).forEach(notice -> {
 			list.add(notice.toListDto());
 		});
 		

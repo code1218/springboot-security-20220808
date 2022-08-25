@@ -1,6 +1,7 @@
 package com.study.security_junil.web.controller.api;
 
 import java.io.IOException;
+import java.lang.ProcessHandle.Info;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,11 +42,13 @@ public class NoticeRestController {
 	private final NoticeService noticeService;
 	
 	@GetMapping("/list/{page}")
-	public ResponseEntity<?> getNoticeList(@PathVariable int page, @RequestParam String search) {
+	public ResponseEntity<?> getNoticeList(@PathVariable int page, @RequestParam String searchFlag, @RequestParam String searchValue) {
 		List<GetNoticeListResponseDto> listDto = null;
 		
+		log.info("{}, {}", searchFlag, searchValue);
+		
 		try {
-			listDto = noticeService.getNoticeList(page);
+			listDto = noticeService.getNoticeList(page, searchFlag, searchValue);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(new CMRespDto<>(-1, "database error", listDto));
