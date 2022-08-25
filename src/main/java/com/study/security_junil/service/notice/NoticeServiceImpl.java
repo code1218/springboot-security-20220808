@@ -21,6 +21,7 @@ import com.study.security_junil.domain.notice.Notice;
 import com.study.security_junil.domain.notice.NoticeFile;
 import com.study.security_junil.domain.notice.NoticeRepository;
 import com.study.security_junil.web.dto.notice.AddNoticeReqDto;
+import com.study.security_junil.web.dto.notice.GetNoticeListResponseDto;
 import com.study.security_junil.web.dto.notice.GetNoticeResponseDto;
 
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,23 @@ public class NoticeServiceImpl implements NoticeService {
 	private final NoticeRepository noticeRepository;
 	
 	@Override
+	public List<GetNoticeListResponseDto> getNoticeList(int page) throws Exception {
+		int index = (page - 1) * 10;
+		
+		List<GetNoticeListResponseDto> list = new ArrayList<GetNoticeListResponseDto>();
+		
+		noticeRepository.getNoticeList(index).forEach(notice -> {
+			list.add(notice.toListDto());
+		});
+		
+		return list;
+	}
+	
+	@Override
 	public int addNotice(AddNoticeReqDto addNoticeReqDto) throws Exception {
 		Predicate<String> predicate = (filename) -> !filename.isBlank();
 		
 		Notice notice = null;
-		
 		
 		notice = Notice.builder()
 				.notice_title(addNoticeReqDto.getNoticeTitle())
@@ -90,15 +103,18 @@ public class NoticeServiceImpl implements NoticeService {
 		reqMap.put("flag", flag);
 		reqMap.put("notice_code", noticeCode);
 		
+		noticeRepository.countIncrement(reqMap);
 		List<Notice> notices = noticeRepository.getNotice(reqMap);
 		if(!notices.isEmpty()) {
 			List<Map<String, Object>> downloadFiles = new ArrayList<Map<String,Object>>();
 			notices.forEach(notice -> {
 				Map<String, Object> fileMap = new HashMap<String, Object>();
-				fileMap.put("fileCode", notice.getFile_code());
-				
 				String fileName = notice.getFile_name();
-				fileMap.put("fileName", fileName.substring(fileName.indexOf("_") + 1));
+				if(fileName != null) {
+					fileMap.put("fileCode", notice.getFile_code());
+					fileMap.put("fileOriginName", fileName.substring(fileName.indexOf("_") + 1));
+					fileMap.put("fileTempName", fileName);
+				}
 				
 				downloadFiles.add(fileMap);
 			});

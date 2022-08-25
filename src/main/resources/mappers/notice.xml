@@ -4,6 +4,24 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.study.security_junil.domain.notice.NoticeRepository">
+
+	<select id="getNoticeList" parameterType="Integer" resultType="com.study.security_junil.domain.notice.Notice">
+		select
+			nm.notice_code,
+			nm.notice_title,
+			um.user_id,
+			nm.create_date,
+			nm.notice_count,
+			(select count(*) from notice_mst) as total_notice_count
+		from
+			notice_mst nm
+			left outer join user_mst um on(um.user_code = nm.user_code)
+		order by
+			notice_code desc
+		limit #{index}, 10;
+			
+	</select>
+
 	<insert id="saveNotice" parameterType="com.study.security_junil.domain.notice.Notice"
 		useGeneratedKeys="true" keyProperty="notice_code">
 		insert into
@@ -41,6 +59,7 @@
 			nm.user_code,
 			um.user_id,
 			nm.notice_content,
+			nm.notice_count,
 			nf.file_code,
 			nf.file_name,
 			nm.create_date
@@ -76,6 +95,39 @@
 		</choose>
 			
 	</select>
+	
+	<update id="countIncrement" parameterType="hashmap">
+		update
+			notice_mst
+		set
+			notice_count = notice_count + 1
+		where
+		<choose>
+			<when test='flag == null'>
+				notice_code = #{notice_code}
+			</when>
+			<when test='flag.equals("pre")'>
+				notice_code = (
+					select
+						max(notice_code)
+					from
+						notice_mst
+					where
+						notice_code &lt; #{notice_code}
+				)
+			</when>
+			<otherwise>
+				notice_code = (
+					select
+						min(notice_code)
+					from
+						notice_mst
+					where
+						notice_code &gt; #{notice_code}
+				)
+			</otherwise>
+		</choose>
+	</update>
 	
 </mapper>
   
