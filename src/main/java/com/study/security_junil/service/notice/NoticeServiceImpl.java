@@ -61,40 +61,44 @@ public class NoticeServiceImpl implements NoticeService {
 		
 		Notice notice = null;
 		
-		notice = Notice.builder()
-				.notice_title(addNoticeReqDto.getNoticeTitle())
-				.user_code(addNoticeReqDto.getUserCode())
-				.notice_content(addNoticeReqDto.getIr1())
-				.build();
+		String noticeTitle = addNoticeReqDto.getNoticeTitle();
 		
-		noticeRepository.saveNotice(notice);
-		
-		if(predicate.test(addNoticeReqDto.getFile().get(0).getOriginalFilename())) {
-			List<NoticeFile> noticeFiles = new ArrayList<NoticeFile>();
+		for(int i = 0; i < 200; i++) {
+			notice = Notice.builder()
+					.notice_title(noticeTitle + "_" + i)
+					.user_code(addNoticeReqDto.getUserCode())
+					.notice_content(addNoticeReqDto.getIr1())
+					.build();
 			
-			for(MultipartFile file : addNoticeReqDto.getFile()) {
-				String originalFilename = file.getOriginalFilename();
-				String tempFilename = UUID.randomUUID().toString().replaceAll("-", "") + "_" + originalFilename;
-				log.info(tempFilename);
+			noticeRepository.saveNotice(notice);
+			
+			if(predicate.test(addNoticeReqDto.getFile().get(0).getOriginalFilename())) {
+				List<NoticeFile> noticeFiles = new ArrayList<NoticeFile>();
 				
-				Path uploadPath = Paths.get(filePath, "notice/" + tempFilename);
-				
-				File f = new File(filePath + "notice");
-				if(!f.exists()) {
-					f.mkdirs();
+				for(MultipartFile file : addNoticeReqDto.getFile()) {
+					String originalFilename = file.getOriginalFilename();
+					String tempFilename = UUID.randomUUID().toString().replaceAll("-", "") + "_" + originalFilename;
+					log.info(tempFilename);
+					
+					Path uploadPath = Paths.get(filePath, "notice/" + tempFilename);
+					
+					File f = new File(filePath + "notice");
+					if(!f.exists()) {
+						f.mkdirs();
+					}
+					
+					try {
+						Files.write(uploadPath, file.getBytes());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					noticeFiles.add(NoticeFile.builder().notice_code(notice.getNotice_code()).file_name(tempFilename).build());
 				}
 				
-				try {
-					Files.write(uploadPath, file.getBytes());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				noticeRepository.saveNoticeFiles(noticeFiles);
 				
-				noticeFiles.add(NoticeFile.builder().notice_code(notice.getNotice_code()).file_name(tempFilename).build());
 			}
-			
-			noticeRepository.saveNoticeFiles(noticeFiles);
-			
 		}
 		
 		return notice.getNotice_code();
