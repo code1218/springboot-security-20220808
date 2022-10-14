@@ -10,9 +10,10 @@
 	</parent>
 	<groupId>com.study</groupId>
 	<artifactId>security_junil</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>security_junil</name>
 	<description>Demo project for Spring Boot</description>
+	<packaging>jar</packaging>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
