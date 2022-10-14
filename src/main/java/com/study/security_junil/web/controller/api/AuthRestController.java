@@ -8,11 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.study.security_junil.handler.aop.annotation.Log;
 import com.study.security_junil.handler.aop.annotation.Timer;
@@ -69,6 +65,16 @@ public class AuthRestController {
 	
 	@GetMapping("/principal")
 	public ResponseEntity<?> getPrincipal(@AuthenticationPrincipal PrincipalDetails principalDetails){
+		if(principalDetails == null) {
+			return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "principal is null", null));
+		}
+		return ResponseEntity.ok(new CMRespDto<>(1, "success load", principalDetails.getUser()));
+	}
+
+	@PutMapping("/principal")
+	public ResponseEntity<?> updatePrincipal(@AuthenticationPrincipal PrincipalDetails principalDetails){
+		principalDetails.getUser().setUser_gender(2);
+
 		if(principalDetails == null) {
 			return ResponseEntity.badRequest().body(new CMRespDto<>(-1, "principal is null", null));
 		}

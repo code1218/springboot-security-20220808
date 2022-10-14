@@ -96,7 +96,7 @@ function getPageNumbers(totalNoticeCount) {
 		`
 	}
 	
-	if(endIndex != totalNoticeCount) {
+	if(endIndex != totalPageCount) {
 		pageButtons.innerHTML += `
 			<button type="button" class="page-button next">&gt;</button>
 		`;
@@ -110,7 +110,7 @@ function getPageNumbers(totalNoticeCount) {
 		}
 	}
 	
-	if(endIndex != totalNoticeCount) {
+	if(endIndex != totalPageCount) {
 		const nextPageButton = document.querySelector(".next");
 		nextPageButton.onclick = () => {
 			nowPage = endIndex + 1;

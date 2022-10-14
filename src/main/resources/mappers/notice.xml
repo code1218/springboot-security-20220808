@@ -86,7 +86,7 @@
 			)
 		</foreach>
 	</insert>
-	
+
 	<select id="getNotice" parameterType="hashmap" 
 		resultType="com.study.security_junil.domain.notice.Notice">
 		SELECT
@@ -164,7 +164,7 @@
 			</otherwise>
 		</choose>
 	</update>
-	
+
 </mapper>
   
   
